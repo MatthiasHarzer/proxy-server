@@ -29,6 +29,8 @@ or sending some form data will still work.
 - Start the server with `docker compose up -d --build`
 - The server will start on port `9996` by default. This can be chagedin the `docker-compose.yml` file.
 
+> Note: When using this proxy behind a reverse proxy like Nginx, ensure that slashes are not merged, since this will break the protocol in the URL like `https://`
+
 ### Configure the caching behavior
 You can configure the caching behavior of the server by setting some environment variables in the [`docker-compose.yml`](./docker-compose.yml) file.
 There are four caching modes available by setting the `CACHE_MODE` environment variable:
