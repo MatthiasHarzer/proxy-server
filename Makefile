@@ -37,7 +37,6 @@ security:
 	@uv run bandit -r $(PACKAGE) -c pyproject.toml
 
 typecheck:
-	@uv add pyright --dev
 	@echo "Running type checking..."
 	@uv run pyright $(PACKAGE)
 
