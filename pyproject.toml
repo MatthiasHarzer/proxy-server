@@ -12,3 +12,13 @@ dependencies = [
     "requests==2.32.5",
     "uvicorn==0.37.0",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff==0.13.3",
+    "bandit==1.8.6",
+    "pyright==1.1.406",
+]
+
+[tool.bandit]
+exclude_dirs = [".venv"]
