@@ -12,7 +12,9 @@ def _hash_request(request: CacheRequest) -> int:
     :param request:
     :return:
     """
-    return hash((request.method, request.url, request.body, json.dumps(request.headers)))
+    return hash(
+        (request.method, request.url, request.body, json.dumps(request.headers))
+    )
 
 
 class InMemoryCacheProvider(CacheProvider):

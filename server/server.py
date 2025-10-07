@@ -1,5 +1,4 @@
-from typing import Any, Literal
-from fastapi.responses import PlainTextResponse
+from typing import Any
 import requests
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,11 +48,12 @@ def do_proxy_request(url: str, request: Request, body_: Any | None = None) -> by
 
     try:
         proxy_request = requests.request(
-            request.method, url, headers=headers, data=body)
+            request.method, url, headers=headers, data=body
+        )
         return proxy_request.content
     except requests.exceptions.ConnectionError:
         raise HTTPException(status_code=404, detail="Connection Error")
-    except:
+    except Exception:
         raise HTTPException(status_code=400, detail="Error")
 
 
@@ -108,8 +108,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_api_route('/cache/max-age:{max_age:int}/{url:path}',
-                  handle_cache, methods=ALLOWED_METHODS)
-app.add_api_route('/cache/{url:path}',
-                  handle_cache_no_age, methods=ALLOWED_METHODS)
-app.add_api_route('/{url:path}', handle_proxy, methods=ALLOWED_METHODS)
+app.add_api_route(
+    "/cache/max-age:{max_age:int}/{url:path}", handle_cache, methods=ALLOWED_METHODS
+)
+app.add_api_route("/cache/{url:path}", handle_cache_no_age, methods=ALLOWED_METHODS)
+app.add_api_route("/{url:path}", handle_proxy, methods=ALLOWED_METHODS)

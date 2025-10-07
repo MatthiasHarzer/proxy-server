@@ -28,7 +28,9 @@ def _get_current_timestamp() -> str:
 
 
 class MySQLCacheProvider(CacheProvider):
-    def __init__(self, host: str, user: str, password: str, database: str, port: int = 3306):
+    def __init__(
+        self, host: str, user: str, password: str, database: str, port: int = 3306
+    ):
         self.host = host
         self.user = user
         self.password = password
@@ -47,7 +49,7 @@ class MySQLCacheProvider(CacheProvider):
             user=self.user,
             password=self.password,
             database=self.database,
-            port=self.port
+            port=self.port,
         )  # type: ignore
 
     def _create_table(self):
@@ -72,7 +74,8 @@ class MySQLCacheProvider(CacheProvider):
         c = db.cursor()
         c.execute(
             "SELECT response, timestamp FROM cache WHERE method = %s AND url = %s AND body <=> %s AND headers <=> %s",
-            (request.method, request.url, request.body, headers))
+            (request.method, request.url, request.body, headers),
+        )
 
         result = c.fetchone()
         if result:
@@ -92,15 +95,26 @@ class MySQLCacheProvider(CacheProvider):
         c = db.cursor()
         c.execute(
             "SELECT id FROM cache WHERE method = %s AND url = %s AND body <=> %s AND headers <=> %s",
-            (request.method, request.url, request.body, headers))
+            (request.method, request.url, request.body, headers),
+        )
         existing = c.fetchone()
 
         if existing:
-            c.execute("UPDATE cache SET response = %s, timestamp = %s WHERE id = %s",
-                      (response, _get_current_timestamp(), existing[0]))
+            c.execute(
+                "UPDATE cache SET response = %s, timestamp = %s WHERE id = %s",
+                (response, _get_current_timestamp(), existing[0]),
+            )
         else:
             c.execute(
                 "INSERT INTO cache (method, url, response, body, headers, timestamp) VALUES (%s, %s, %s, %s, %s, %s)",
-                (request.method, request.url, response, request.body, headers, _get_current_timestamp()))
+                (
+                    request.method,
+                    request.url,
+                    response,
+                    request.body,
+                    headers,
+                    _get_current_timestamp(),
+                ),
+            )
 
         db.commit()
