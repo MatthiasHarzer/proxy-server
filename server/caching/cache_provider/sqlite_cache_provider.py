@@ -70,7 +70,8 @@ class SQLiteCacheProvider(CacheProvider):
                 c.execute(
                     "SELECT response, timestamp FROM cache WHERE method = ? "
                     "AND url = ? AND body IS ? AND headers IS ?",
-                    (request.method, request.url, request.body, headers))
+                    (request.method, request.url, request.body, headers),
+                )
                 result = c.fetchone()
 
                 if not result:
@@ -93,19 +94,31 @@ class SQLiteCacheProvider(CacheProvider):
         with self._connect() as conn:
             c = conn.cursor()
 
-            c.execute("SELECT id, timestamp FROM cache WHERE method = ? "
-                      "AND url = ? AND body IS ? AND headers IS ?",
-                      (request.method, request.url, request.body, headers))
+            c.execute(
+                "SELECT id, timestamp FROM cache WHERE method = ? "
+                "AND url = ? AND body IS ? AND headers IS ?",
+                (request.method, request.url, request.body, headers),
+            )
             result = c.fetchone()
 
             if result:
-                c.execute("UPDATE cache SET response = ?, timestamp = ? WHERE id = ?",
-                          (response, _get_current_timestamp(), result[0]))
+                c.execute(
+                    "UPDATE cache SET response = ?, timestamp = ? WHERE id = ?",
+                    (response, _get_current_timestamp(), result[0]),
+                )
                 conn.commit()
                 return
             else:
                 c.execute(
                     "INSERT INTO cache (method, url, response, body, headers, timestamp) "
                     "VALUES (?, ?, ?, ?, ?, ?)",
-                    (request.method, request.url, response, request.body, headers, _get_current_timestamp()))
+                    (
+                        request.method,
+                        request.url,
+                        response,
+                        request.body,
+                        headers,
+                        _get_current_timestamp(),
+                    ),
+                )
                 conn.commit()

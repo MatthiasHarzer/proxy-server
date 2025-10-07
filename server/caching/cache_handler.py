@@ -1,15 +1,12 @@
-
 import os
 
-import requests
 from server.caching.cache_provider import CacheProvider
 from server.caching.cache_provider.in_memory_cache_provider import InMemoryCacheProvider
 from server.caching.cache_provider.mysql_cache_provider import MySQLCacheProvider
 from server.caching.cache_provider.no_cache_provider import NoCacheProvider
 from server.caching.cache_provider.sqlite_cache_provider import SQLiteCacheProvider
-from server.caching.cache_request import CacheRequest
 
-CACHE_DB_FILE = f"data/cache.db"
+CACHE_DB_FILE = "data/cache.db"
 
 
 def get_cache_provider() -> CacheProvider:
@@ -35,9 +32,11 @@ def get_cache_provider() -> CacheProvider:
             port = os.environ.get("MYSQL_PORT", 3306)
 
             if None in (host, user, password, database):
-                print("WARNING: Missing environment variables for MySQL cache provider. "
-                      "Required: MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE"
-                      "\nFalling back to NoCacheProvider.")
+                print(
+                    "WARNING: Missing environment variables for MySQL cache provider. "
+                    "Required: MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE"
+                    "\nFalling back to NoCacheProvider."
+                )
                 return NoCacheProvider()
 
             return MySQLCacheProvider(
@@ -45,12 +44,15 @@ def get_cache_provider() -> CacheProvider:
                 user=user,  # type: ignore
                 password=password,  # type: ignore
                 database=database,  # type: ignore
-                port=port  # type: ignore
+                port=port,  # type: ignore
             )
         case "none":
             return NoCacheProvider()
 
-    print(f"WARNING: No cache provider found for type {
-          cache_type}. Using NoCacheProvider.")
+    print(
+        f"WARNING: No cache provider found for type {
+            cache_type
+        }. Using NoCacheProvider."
+    )
 
     return NoCacheProvider()

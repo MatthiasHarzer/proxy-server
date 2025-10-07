@@ -5,7 +5,6 @@ Useful to bypass CORS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-### Usage
 Given your server is running on `https://proxy.example.com`.
 
 Instead of making a request to a URL directly, prepend the proxy server URL.
@@ -24,15 +23,13 @@ with `https://proxy.example.com/https://cors-protected-site.com/anything`.
 or sending some form data will still work.
 
 
-### Setup using docker compose
-- Clone this repository
-- Start the server with `docker compose up -d --build`
-- The server will start on port `9996` by default. This can be chagedin the `docker-compose.yml` file.
+### Setup using Docker
+Use the docker image `ghcr.io/matthiasharzer/simple-proxy-server:latest` or build the image yourself. Once running, the server will be available on port `8080` inside the container.
 
 > Note: When using this proxy behind a reverse proxy like Nginx, ensure that slashes are not merged, since this will break the protocol in the URL like `https://`
 
 ### Configure the caching behavior
-You can configure the caching behavior of the server by setting some environment variables in the [`docker-compose.yml`](./docker-compose.yml) file.
+You can configure the caching behavior of the server by setting some environment variables.
 There are four caching modes available by setting the `CACHE_MODE` environment variable:
 
 | **`CACHE_MODE`**    | Description                                     | Additional settings                                                                                                                                                                                   |
