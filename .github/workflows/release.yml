@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - "main"
+
+permissions:
+    contents: write
+    packages: write
+
+
+jobs:
+  get-next-version:
+    name: Get next version
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      hasNextVersion: ${{ steps.get-next-version.outputs.hasNextVersion }}
+      version: ${{ steps.get-next-version.outputs.version }}
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+      - name: Get next version
+        id: get-next-version
+        uses: thenativeweb/get-next-version@2.7.1
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: get-next-version
+
+    if: needs.get-next-version.outputs.hasNextVersion == 'true'
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: "0"
+      - name: Use Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          curl --location --silent --show-error --fail https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync --dev
+      - name: Run QA
+        run: make qa
+      - name: Create new version
+        run: |
+          sed -i -r "s/(version = \")([0-9]+\.[0-9]+\.[0-9]+)(\")/\1${{ needs.get-next-version.outputs.version }}\3/" pyproject.toml
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git add pyproject.toml
+          git commit -m 'chore: Bump version to ${{ needs.get-next-version.outputs.version }}. [skip ci]'
+          git push
+          git tag ${{ needs.get-next-version.outputs.version }}
+          git push origin ${{ needs.get-next-version.outputs.version }}
+      - name: Build package
+        run: |
+          make build
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          provenance: mode=max
+          push: true
+          tags: |
+            ghcr.io/matthiasharzer/simple-proxy-server:latest
+            ghcr.io/matthiasharzer/simple-proxy-server:${{ needs.get-next-version.outputs.version }}

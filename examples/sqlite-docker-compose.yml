@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   proxy-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/matthiasharzer/simple-proxy-server:latest
 
     environment:
       - CACHE_MODE=sqlite
@@ -14,5 +12,5 @@ services:
       - ./data:/app/data
 
     ports:
-      - "9996:8000"
+      - "9996:8080"
     restart: always
