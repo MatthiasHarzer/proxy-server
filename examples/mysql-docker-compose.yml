@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   proxy-server:
-    image: ghcr.io/matthiasharzer/simple-proxy-server:latest
+    image: ghcr.io/matthiasharzer/proxy-server:latest
 
     environment:
       - CACHE_MODE=mysql

@@ -3,8 +3,8 @@ import requests
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from server import caching
-from server.caching.cache_request import CacheRequest
+from proxy import caching
+from proxy.caching.cache_request import CacheRequest
 
 ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
 BODY_ALLOWED_METHODS = ["POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
