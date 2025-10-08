@@ -1,10 +1,10 @@
 import os
 
-from server.caching.cache_provider import CacheProvider
-from server.caching.cache_provider.in_memory_cache_provider import InMemoryCacheProvider
-from server.caching.cache_provider.mysql_cache_provider import MySQLCacheProvider
-from server.caching.cache_provider.no_cache_provider import NoCacheProvider
-from server.caching.cache_provider.sqlite_cache_provider import SQLiteCacheProvider
+from proxy.caching.cache_provider import CacheProvider
+from proxy.caching.cache_provider.in_memory_cache_provider import InMemoryCacheProvider
+from proxy.caching.cache_provider.mysql_cache_provider import MySQLCacheProvider
+from proxy.caching.cache_provider.no_cache_provider import NoCacheProvider
+from proxy.caching.cache_provider.sqlite_cache_provider import SQLiteCacheProvider
 
 CACHE_DB_FILE = "data/cache.db"
 

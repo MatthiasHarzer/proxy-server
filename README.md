@@ -24,7 +24,7 @@ or sending some form data will still work.
 
 
 ### Setup using Docker
-Use the docker image `ghcr.io/matthiasharzer/simple-proxy-server:latest` or build the image yourself. Once running, the server will be available on port `8080` inside the container.
+Use the docker image `ghcr.io/matthiasharzer/proxy-server:latest` or build the image yourself. Once running, the server will be available on port `8080` inside the container.
 
 > Note: When using this proxy behind a reverse proxy like Nginx, ensure that slashes are not merged, since this will break the protocol in the URL like `https://`
 

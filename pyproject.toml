@@ -1,5 +1,5 @@
 [project]
-name = "simple-proxy-server"
+name = "proxy-server"
 version = "0.1.0"
 description = "A simple proxy server implemented in Python."
 readme = "README.md"
