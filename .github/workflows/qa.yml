@@ -16,13 +16,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
+    strategy:
+      matrix:
+        version: ['3.13', '3.14']
+
     steps:
       - name: Clone repository
         uses: actions/checkout@v5
       - name: Use Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.13'
+          python-version: ${{ matrix.version }}
       - name: Install dependencies
         run: |
           curl --location --silent --show-error --fail https://astral.sh/uv/install.sh | sh
