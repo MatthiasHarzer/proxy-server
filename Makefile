@@ -1,4 +1,4 @@
-PACKAGE = server
+PACKAGE = proxy
 
 qa: analyze typecheck security
 

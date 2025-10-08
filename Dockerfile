@@ -8,4 +8,4 @@ WORKDIR /app
 RUN uv sync
 ENV PATH="/app/.venv/bin:$PATH"
 
-CMD ["uvicorn", "server.server:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "proxy.server:app", "--host", "0.0.0.0", "--port", "8080"]
