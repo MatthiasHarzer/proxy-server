@@ -1,7 +1,7 @@
 Proxies a request to a given URL by making the request on the server and returning the response.
 Headers and body will be preserved, therefore the behavior should be identical to making the request directly.
 
-Useful to bypass CORS
+Useful to bypass CORS restricted sites.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -17,7 +17,7 @@ with `https://proxy.example.com/https://cors-protected-site.com/anything`.
 |----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `/<url>`                         | The default proxy endpoint. The http-method, headers, and body will be preserved                                                                       |
 | `/cache/<url>`                   | Works just like `/<url>` but tries to return a cached version of the request and creates a cached version if none is present                           |
-| `/cache/max-age:<max-age>/<url>` | Like `/cache/<url>`, but only returns a cached response, if the response if not older that `max-age` (seconds). Creates a new cached version otherwise |
+| `/cache/max-age:<max-age>/<url>` | Like `/cache/<url>`, but only returns a cached response, if the response is not older than `max-age` (seconds). Creates a new cached version otherwise |
 
 > HTTP-Method, headers and body (if available) will be preserved as if making the request directly. Therefore, header-based authentication 
 or sending some form data will still work.
